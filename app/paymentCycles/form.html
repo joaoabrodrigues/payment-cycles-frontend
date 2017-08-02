@@ -1,14 +1,14 @@
 <div role="form">
     <div class="box-body">
-        <field id="name" label="Name" grid="12 6 4" placeholder="Enter the name" model="pcCtrl.paymentCycle.name"></field>
-        <field id="month" label="Month" grid="12 6 4" placeholder="Enter the month" type="number" model="pcCtrl.paymentCycle.month"></field>
-        <field id="year" label="Year" grid="12 6 4" placeholder="Enter the year" type="number" model="pcCtrl.paymentCycle.year"></field>
+        <field id="name" label="Name" grid="12 6 4" placeholder="Enter the name" model="pcCtrl.paymentCycle.name" readonly="pcCtrl.tabDelete"></field>
+        <field id="month" label="Month" grid="12 6 4" placeholder="Enter the month" type="number" model="pcCtrl.paymentCycle.month" readonly="pcCtrl.tabDelete"></field>
+        <field id="year" label="Year" grid="12 6 4" placeholder="Enter the year" type="number" model="pcCtrl.paymentCycle.year" readonly="pcCtrl.tabDelete"></field>
 
     </div>
     <div class="box-footer">
-        <button class="btn btn-primary" ng-click="pcCtrl.create()">Create</button>
-        <button class="btn btn-info">Update</button>
-        <button class="btn btn-danger">Delete</button>
-        <button class="btn btn-default">Cancel</button>
+        <button ng-if="pcCtrl.tabCreate" ng-click="pcCtrl.create()" class="btn btn-primary">Create</button>
+        <button ng-if="pcCtrl.tabUpdate" ng-click="pcCtrl.update()" class="btn btn-info">Update</button>
+        <button ng-if="pcCtrl.tabDelete" ng-click="pcCtrl.delete()" class="btn btn-danger">Delete</button>
+        <button class="btn btn-default" ng-click="pcCtrl.showTabList()">Cancel</button>
     </div>
 </div>
