@@ -1,20 +1,28 @@
 (function(){
     angular.module('paymentCycle').controller('PaymentCycleCtrl',[
         '$http',
+        '$location',
         'msgs',
         'tabs',
         PaymentCycleController
     ])
 
-    function PaymentCycleController($http, msgs, tabs) {
+    function PaymentCycleController($http, $location, msgs, tabs) {
         const vm = this
         const url = 'https://payment-cycles.herokuapp.com/api/v1/paymentCycles'
 
         vm.refresh = function() {
-           $http.get(url).then(function(response) {
-                vm.paymentCycle = {}
+            const page = parseInt($location.search().page) || 1
+
+            $http.get(`${url}?skip=${(page - 1) * 10}&limit=10`).then(function(response) {
+                vm.paymentCycle = {credits: [{}], debts: [{status: 'PENDENTE'}]}
                 vm.paymentCycles = response.data
-                tabs.show(vm, {tabList: true, tabCreate: true})
+                vm.calculateValues()
+
+                $http.get(`${url}/count`).then(function(response) {
+                    vm.pages = Math.ceil(response.data.value / 10)
+                    tabs.show(vm, {tabList: true, tabCreate: true})
+                })
            })
         }
 
@@ -25,11 +33,13 @@
 
         vm.showTabUpdate = function(paymentCycle) {
             vm.paymentCycle = paymentCycle
+            vm.calculateValues()
             tabs.show(vm, {tabUpdate: true})
         }
 
         vm.showTabDelete = function(paymentCycle) {
             vm.paymentCycle = paymentCycle
+            vm.calculateValues()
             tabs.show(vm, {tabDelete: true})
         }
 
@@ -60,6 +70,59 @@
             }, function(response) {
                 msgs.addError(response.data.errors)
             })
+        }
+
+        vm.addCredit = function(index) {
+            vm.paymentCycle.credits.splice(index + 1, 0, {})
+        }
+
+        vm.cloneCredit = function(index, {name, value}) {
+            vm.paymentCycle.credits.splice(index + 1, 0, {name, value})
+            vm.calculateValues()
+        }
+
+        vm.deleteCredit = function(index) {
+            if (vm.paymentCycle.credits.length > 1) {
+                vm.paymentCycle.credits.splice(index, 1)
+            } else {
+                vm.paymentCycle.credits = [{}]
+            }
+            vm.calculateValues()
+        }
+
+        vm.addDebt = function(index) {
+            vm.paymentCycle.debts.splice(index + 1, 0, {})
+        }
+
+        vm.cloneDebt = function(index, {name, value}) {
+            vm.paymentCycle.debts.splice(index + 1, 0, {name, value, status})
+            vm.calculateValues()
+        }
+
+        vm.deleteDebt = function(index) {
+            if (vm.paymentCycle.debts.length > 1) {
+                vm.paymentCycle.debts.splice(index, 1)
+            } else {
+                vm.paymentCycle.debts = [{}]
+            }
+            vm.calculateValues()
+        }
+
+        vm.calculateValues = function() {
+            vm.credit = 0
+            vm.debt = 0
+
+            if (vm.paymentCycle) {
+                vm.paymentCycle.credits.forEach(function({value}) {
+                    vm.credit += !value || isNaN(value) ? 0 : parseFloat(value)
+                })
+
+                vm.paymentCycle.debts.forEach(function({value}) {
+                    vm.debt += !value || isNaN(value) ? 0 : parseFloat(value)
+                })
+
+                vm.total = vm.credit - vm.debt
+            }
         }
 
         vm.refresh()
