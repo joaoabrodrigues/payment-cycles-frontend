@@ -15,3 +15,7 @@ html {
 .table-actions {
   width: 45%;
 }
+
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header {
+    height: 100%;
+}
