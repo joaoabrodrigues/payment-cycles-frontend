@@ -15,6 +15,7 @@
         vm.refresh = function() {
             const page = parseInt($location.search().page) || 1
             $http.defaults.headers.common.userEmail = JSON.parse(localStorage.getItem(consts.userKey)).email
+            $http.defaults.headers.common.Authorization = JSON.parse(localStorage.getItem(consts.userKey)).token
             $http.get(`${url}/getByUser?skip=${(page - 1) * 10}&limit=10`).then(function(response) {
                 vm.paymentCycle = {credits: [{}], debts: [{status: 'PENDENTE'}]}
                 vm.paymentCycles = response.data
