@@ -4,17 +4,18 @@
         '$location',
         'msgs',
         'tabs',
+        'consts',
         PaymentCycleController
     ])
 
-    function PaymentCycleController($http, $location, msgs, tabs) {
+    function PaymentCycleController($http, $location, msgs, tabs, consts) {
         const vm = this
         const url = 'https://payment-cycles.herokuapp.com/api/v1/paymentCycles'
 
         vm.refresh = function() {
             const page = parseInt($location.search().page) || 1
-
-            $http.get(`${url}?skip=${(page - 1) * 10}&limit=10`).then(function(response) {
+            $http.defaults.headers.common.userEmail = JSON.parse(localStorage.getItem(consts.userKey)).email
+            $http.get(`${url}/getByUser?skip=${(page - 1) * 10}&limit=10`).then(function(response) {
                 vm.paymentCycle = {credits: [{}], debts: [{status: 'PENDENTE'}]}
                 vm.paymentCycles = response.data
                 vm.calculateValues()
@@ -44,6 +45,7 @@
         }
 
         vm.create = function() {
+            vm.paymentCycle.userEmail = JSON.parse(localStorage.getItem(consts.userKey)).email
             $http.post(url, vm.paymentCycle).then(function(){
                 vm.showTabList()
                 msgs.addSuccess('Create Successful!')
@@ -76,8 +78,8 @@
             vm.paymentCycle.credits.splice(index + 1, 0, {})
         }
 
-        vm.cloneCredit = function(index, {name, value}) {
-            vm.paymentCycle.credits.splice(index + 1, 0, {name, value})
+        vm.cloneCredit = function(index, {name, value, date}) {
+            vm.paymentCycle.credits.splice(index + 1, 0, {name, value, date})
             vm.calculateValues()
         }
 
@@ -94,8 +96,8 @@
             vm.paymentCycle.debts.splice(index + 1, 0, {})
         }
 
-        vm.cloneDebt = function(index, {name, value}) {
-            vm.paymentCycle.debts.splice(index + 1, 0, {name, value, status})
+        vm.cloneDebt = function(index, {name, value, status, date}) {
+            vm.paymentCycle.debts.splice(index + 1, 0, {name, value, status, date})
             vm.calculateValues()
         }
 

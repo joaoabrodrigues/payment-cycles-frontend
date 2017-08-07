@@ -1,13 +1,15 @@
 (function() {
   angular.module('paymentCycle').controller('DashboardController', [
     '$http',
+    'consts',
     DashboardController
   ])
 
-  function DashboardController($http) {
+  function DashboardController($http, consts) {
     const vm = this
     vm.getSummary = function() {
       const url = 'https://payment-cycles.herokuapp.com/api/v1/paymentSummary'
+      $http.defaults.headers.common.userEmail = JSON.parse(localStorage.getItem(consts.userKey)).email
       $http.get(url).then(function(response){
         const {credit = 0, debt = 0} = response.data
         vm.credit = credit
