@@ -88,7 +88,7 @@
             if (vm.paymentCycle.credits.length > 1) {
                 vm.paymentCycle.credits.splice(index, 1)
             } else {
-                vm.paymentCycle.credits = [{}]
+                vm.paymentCycle.credits = [{name:"", value:"", date:""}]
             }
             vm.calculateValues()
         }
@@ -106,7 +106,7 @@
             if (vm.paymentCycle.debts.length > 1) {
                 vm.paymentCycle.debts.splice(index, 1)
             } else {
-                vm.paymentCycle.debts = [{}]
+                vm.paymentCycle.debts = [{name:"", value:"", status:"PENDENTE", date:""}]
             }
             vm.calculateValues()
         }
