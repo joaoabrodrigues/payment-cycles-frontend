@@ -76,7 +76,7 @@
         }
 
         vm.addCredit = function(index) {
-            vm.paymentCycle.credits.splice(index + 1, 0, {})
+            vm.paymentCycle.credits.splice(index + 1, 0, {name:"", value:"", date:""})
         }
 
         vm.cloneCredit = function(index, {name, value, date}) {
@@ -94,7 +94,7 @@
         }
 
         vm.addDebt = function(index) {
-            vm.paymentCycle.debts.splice(index + 1, 0, {})
+            vm.paymentCycle.debts.splice(index + 1, 0, {name:"", value:"", status:"PENDENTE", date:""})
         }
 
         vm.cloneDebt = function(index, {name, value, status, date}) {
