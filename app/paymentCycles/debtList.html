@@ -15,7 +15,7 @@
                     <input ng-model="debt.name" class="form-control" placeholder="Enter the name" ng-readonly="pcCtrl.tabDelete" />
                 </td>
                 <td>
-                    <input ng-change="pcCtrl.calculateValues()" ng-model="debt.value" class="form-control" placeholder="Enter the value" ng-readonly="pcCtrl.tabDelete" type="number"/>
+                    <input ng-change="pcCtrl.calculateValues()" ng-model="debt.value" class="form-control" placeholder="Enter the value" ng-readonly="pcCtrl.tabDelete" type="text" ui-money-mask currency-symbol="R$"/>
                 </td>
                 <td>
                     <select ng-model="debt.status" class="form-control" ng-disabled="pcCtrl.tabDelete">
@@ -29,7 +29,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input ng-model="debt.date" type="text" class="form-control">
+                        <input ng-model="debt.date" type="text" class="form-control" ui-date-mask="DD/MM/YYYY">
                     </div>
                 </td>
                 <td class="table-actions">

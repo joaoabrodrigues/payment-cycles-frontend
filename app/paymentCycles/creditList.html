@@ -14,14 +14,14 @@
                     <input ng-model="credit.name" class="form-control" placeholder="Enter the name" ng-readonly="pcCtrl.tabDelete" />
                 </td>
                 <td>
-                    <input ng-change="pcCtrl.calculateValues()" ng-model="credit.value" class="form-control" placeholder="Enter the value" ng-readonly="pcCtrl.tabDelete" type="number"/>
+                    <input ng-change="pcCtrl.calculateValues()" ng-model="credit.value" class="form-control" placeholder="Enter the value" ng-readonly="pcCtrl.tabDelete" type="text" ui-money-mask currency-symbol="R$"/>
                 </td>
                 <td>
                     <div class="input-group">
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input ng-model="credit.date" type="text" class="form-control">
+                        <input ng-model="credit.date" type="text" class="form-control" ui-date-mask="DD/MM/YYYY">
                     </div>
                 </td>
                 <td class="table-actions">
